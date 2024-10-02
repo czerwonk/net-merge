@@ -15,7 +15,7 @@ func main() {
 
 func process(r io.Reader) string {
 	cidrs := readToCIDRList(r)
-	merged := merge(cidrs)
+	merged := Merge(cidrs)
 
 	return toOutput(merged)
 }
@@ -25,7 +25,7 @@ func readToCIDRList(r io.Reader) []net.IPNet {
 
 	s := bufio.NewScanner(r)
 	for s.Scan() {
-		ok, cidr := parseCIDR(s.Text())
+		ok, cidr := ParseCIDR(s.Text())
 		if ok {
 			res = append(res, *cidr)
 		}

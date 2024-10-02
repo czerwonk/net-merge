@@ -6,7 +6,7 @@ import (
 	"slices"
 )
 
-func merge(cidrs []net.IPNet) []net.IPNet {
+func Merge(cidrs []net.IPNet) []net.IPNet {
 	merged := []net.IPNet{}
 
 	slices.SortFunc[[]net.IPNet, net.IPNet](cidrs, func(a net.IPNet, b net.IPNet) int {
@@ -16,15 +16,15 @@ func merge(cidrs []net.IPNet) []net.IPNet {
 	})
 
 	currentOnes := 0
-	moreSpecifics := []net.IPNet{}
+	lessSpecifics := []net.IPNet{}
 	for _, cidr := range cidrs {
 		ones, _ := cidr.Mask.Size()
 		if ones > currentOnes {
-			moreSpecifics = merged
+			lessSpecifics = merged
 			currentOnes = ones
 		}
 
-		if hasMoreSpecific(cidr, moreSpecifics) {
+		if hasLessSpecific(cidr, lessSpecifics) {
 			continue
 		}
 
@@ -34,8 +34,8 @@ func merge(cidrs []net.IPNet) []net.IPNet {
 	return merged
 }
 
-func hasMoreSpecific(cidr net.IPNet, moreSpecifics []net.IPNet) bool {
-	for _, ms := range moreSpecifics {
+func hasLessSpecific(cidr net.IPNet, lessSpecifics []net.IPNet) bool {
+	for _, ms := range lessSpecifics {
 		if ms.Contains(cidr.IP) {
 			return true
 		}

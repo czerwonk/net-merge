@@ -2,7 +2,7 @@ package main
 
 import "net"
 
-func parseCIDR(s string) (valid bool, res *net.IPNet) {
+func ParseCIDR(s string) (valid bool, res *net.IPNet) {
 	_, ipnet, err := net.ParseCIDR(s)
 	if err != nil {
 		return parseIP(s)
