@@ -6,6 +6,7 @@ import (
 	"io"
 	"net"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -35,11 +36,11 @@ func readToCIDRList(r io.Reader) []net.IPNet {
 }
 
 func toOutput(cidrs []net.IPNet) string {
-	out := ""
+	sb := &strings.Builder{}
 
 	for _, cidr := range cidrs {
-		out += fmt.Sprintf("%s\n", cidr.String())
+		fmt.Fprintf(sb, "%s\n", cidr.String())
 	}
 
-	return out
+	return sb.String()
 }

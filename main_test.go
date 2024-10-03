@@ -45,10 +45,10 @@ func sortLines(s string) string {
 
 	sort.Strings(lines)
 
-	out := ""
+	sb := &strings.Builder{}
 	for _, l := range lines {
-		out += fmt.Sprintf("%s\n", l)
+		fmt.Fprintf(sb, "%s\n", l)
 	}
 
-	return out
+	return sb.String()
 }
