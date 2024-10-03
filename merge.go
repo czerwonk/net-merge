@@ -1,12 +1,12 @@
 package main
 
 import (
-	"cmp"
 	"net"
 	"slices"
 	"sync"
 
 	"github.com/infobloxopen/go-trees/iptree"
+	"golang.org/x/exp/maps"
 )
 
 func Merge(cidrs []net.IPNet) []net.IPNet {
@@ -40,21 +40,45 @@ func Merge(cidrs []net.IPNet) []net.IPNet {
 }
 
 func mergeSubset(cidrs []net.IPNet, ch chan<- net.IPNet, wg *sync.WaitGroup) {
-	slices.SortFunc[[]net.IPNet, net.IPNet](cidrs, func(a net.IPNet, b net.IPNet) int {
-		onesA, _ := a.Mask.Size()
-		onesB, _ := b.Mask.Size()
-		return cmp.Compare[int](onesA, onesB)
-	})
+	defer wg.Done()
 
-	t := iptree.NewTree()
-	for _, cidr := range cidrs {
-		if _, found := t.GetByNet(&cidr); found {
-			continue
-		}
-
-		t = t.InsertNet(&cidr, nil)
-		ch <- cidr
+	grouped := groupCIDRsByPrefixLength(cidrs)
+	if len(grouped) == 0 {
+		return
 	}
 
-	wg.Done()
+	keys := maps.Keys(grouped)
+	asc := func(a, b int) int {
+		return a - b
+	}
+	slices.SortStableFunc(keys, asc)
+	maxPfxLen := keys[len(keys)-1]
+
+	t := iptree.NewTree()
+
+	for _, k := range keys {
+		vals := grouped[k]
+
+		for _, cidr := range vals {
+			if _, found := t.GetByNet(cidr); found {
+				continue
+			}
+
+			if k < maxPfxLen {
+				t = t.InsertNet(cidr, nil)
+			}
+			ch <- *cidr
+		}
+	}
+}
+
+func groupCIDRsByPrefixLength(cidrs []net.IPNet) map[int][]*net.IPNet {
+	grouped := make(map[int][]*net.IPNet)
+
+	for _, cidr := range cidrs {
+		pfxL, _ := cidr.Mask.Size()
+		grouped[pfxL] = append(grouped[pfxL], &cidr)
+	}
+
+	return grouped
 }

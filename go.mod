@@ -5,6 +5,7 @@ go 1.22.1
 require (
 	github.com/infobloxopen/go-trees v0.0.0-20221216143356-66ceba885ebc
 	github.com/stretchr/testify v1.9.0
+	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0
 )
 
 require (
