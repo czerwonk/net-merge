@@ -2,7 +2,10 @@ module github.com/czerwonk/net-merge
 
 go 1.22.1
 
-require github.com/stretchr/testify v1.9.0
+require (
+	github.com/infobloxopen/go-trees v0.0.0-20221216143356-66ceba885ebc
+	github.com/stretchr/testify v1.9.0
+)
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect

@@ -4,6 +4,8 @@ import (
 	"cmp"
 	"net"
 	"slices"
+
+	"github.com/infobloxopen/go-trees/iptree"
 )
 
 func Merge(cidrs []net.IPNet) []net.IPNet {
@@ -15,31 +17,15 @@ func Merge(cidrs []net.IPNet) []net.IPNet {
 		return cmp.Compare[int](onesA, onesB)
 	})
 
-	currentOnes := 0
-	lessSpecifics := []net.IPNet{}
+	t := iptree.NewTree()
 	for _, cidr := range cidrs {
-		ones, _ := cidr.Mask.Size()
-		if ones > currentOnes {
-			lessSpecifics = merged
-			currentOnes = ones
-		}
-
-		if hasLessSpecific(cidr, lessSpecifics) {
+		if _, found := t.GetByNet(&cidr); found {
 			continue
 		}
 
+		t = t.InsertNet(&cidr, nil)
 		merged = append(merged, cidr)
 	}
 
 	return merged
-}
-
-func hasLessSpecific(cidr net.IPNet, lessSpecifics []net.IPNet) bool {
-	for _, ms := range lessSpecifics {
-		if ms.Contains(cidr.IP) {
-			return true
-		}
-	}
-
-	return false
 }
