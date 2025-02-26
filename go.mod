@@ -1,11 +1,11 @@
 module github.com/czerwonk/net-merge
 
-go 1.22.1
+go 1.24
 
 require (
 	github.com/infobloxopen/go-trees v0.0.0-20221216143356-66ceba885ebc
 	github.com/stretchr/testify v1.10.0
-	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0
+	golang.org/x/exp v0.0.0-20250218142911-aa4b98e5adaa
 )
 
 require (
