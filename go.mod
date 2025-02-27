@@ -1,6 +1,8 @@
 module github.com/czerwonk/net-merge
 
-go 1.23
+go 1.23.0
+
+toolchain go1.24.0
 
 require (
 	github.com/infobloxopen/go-trees v0.0.0-20221216143356-66ceba885ebc
