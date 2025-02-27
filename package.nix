@@ -1,6 +1,6 @@
-{ pkgs, lib, buildGo122Module }:
+{ pkgs, lib, buildGo123Module }:
 
-buildGo122Module {
+buildGo123Module {
   pname = "net-merge";
   version = "0.0.1";
 
