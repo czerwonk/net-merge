@@ -17,10 +17,10 @@
     {
       overlays.default = _final: prev:
         let
-          inherit (prev) buildGo122Module callPackage lib;
+          inherit (prev) buildGo123Module callPackage lib;
         in
         {
-          net-merge = callPackage ./package.nix { inherit buildGo122Module lib; };
+          net-merge = callPackage ./package.nix { inherit buildGo123Module lib; };
         };
 
       packages = forAllSystems (system: rec {
