@@ -2,12 +2,12 @@ module github.com/czerwonk/net-merge
 
 go 1.23.0
 
-toolchain go1.24.0
+toolchain go1.24.1
 
 require (
 	github.com/infobloxopen/go-trees v0.0.0-20221216143356-66ceba885ebc
 	github.com/stretchr/testify v1.10.0
-	golang.org/x/exp v0.0.0-20250218142911-aa4b98e5adaa
+	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394
 )
 
 require (
