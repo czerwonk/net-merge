@@ -1,0 +1,43 @@
+version: 2
+
+before:
+  hooks:
+    - go mod download
+    - go mod tidy
+
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    binary: net-merge
+
+archives:
+  - format: tar.gz
+    name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if eq .Mips "softfloat" }}sf{{ end }}'
+    format_overrides:
+      - goos: windows
+        format: zip
+
+nfpms:
+  - vendor:       Daniel Brendgen-Czerwonk
+    homepage:     "https://github.com/czerwonk/net-merge"
+    maintainer:   Daniel Brendgen-Czerwonk
+    description:  "A simple tool to merge multiple network interfaces into one"
+    license:      MIT
+    section:      net
+    priority:     extra
+    file_name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if eq .Mips "softfloat" }}sf{{ end }}'
+    formats:
+      - rpm
+      - deb
+    bindir: /usr/bin
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"

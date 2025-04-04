@@ -21,3 +21,5 @@
 go.work
 net-merge
 *.tmp
+
+dist/
