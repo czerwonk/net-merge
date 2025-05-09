@@ -8,7 +8,7 @@ buildGo123Module {
 
   vendorHash = pkgs.lib.fileContents ./go.mod.sri;
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   meta = with lib; {
     description = "Simple tool for merging CIDR/IP addresses from standard input";
