@@ -1,7 +1,8 @@
 {
   description = "net-merge - simple tool for merging CIDR/IP addresses from standard input";
 
-  outputs = { self, nixpkgs }:
+  outputs =
+    { self, nixpkgs }:
     let
       forAllSystems = nixpkgs.lib.genAttrs [
         "x86_64-linux"
@@ -9,18 +10,21 @@
         "x86_64-darwin"
       ];
 
-      pkgsForSystem = system: (import nixpkgs {
-        inherit system;
-        overlays = [ self.overlays.default ];
-      });
+      pkgsForSystem =
+        system:
+        (import nixpkgs {
+          inherit system;
+          overlays = [ self.overlays.default ];
+        });
     in
     {
-      overlays.default = _final: prev:
+      overlays.default =
+        _final: prev:
         let
-          inherit (prev) buildGo123Module callPackage lib;
+          inherit (prev) buildGo124Module callPackage lib;
         in
         {
-          net-merge = callPackage ./package.nix { inherit buildGo123Module lib; };
+          net-merge = callPackage ./package.nix { inherit buildGo124Module lib; };
         };
 
       packages = forAllSystems (system: rec {
